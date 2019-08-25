@@ -1,0 +1,18 @@
+language: rust
+rust:
+- nightly
+env:
+  matrix:
+  - CODECOV_TOKEN="269f1f40-aa71-41f9-a1b3-d338c7b7584a"
+  global:
+    secure: PZzPE9YSkZAFCkfwTw6gihixN07lp2LaJSCtcUVIw0t8xQu+800KsYEO12+JgL/H0iMXqq+MwWhFSZTboSafySdhxPyJOT9YB3+oGblIPKeSiZjEFUmchnU49O4UJWP63Wi6ORYfyHUaTW+O4s/+5v1QQTYrvw8Eq8zTjYIKExbHn6b3AtJiFvSv3uyuMgjfH7DbZa+fx/U0e2fBm7j1OMCNwQAcgkBsVW9DCQkNsg6azVW7cqnGvclaURoDuqcH+Y9/C7GigqPC3lHoNh19ihqxYG628T+IW7wTw+FB5h9XDNnw3g66CSdVP5ABRXJ+JexvjU1NJuEFgjB7bkpQks2V3XoFnKnxuTKBRW63oIcMexDvOwPqCtny4QcityZNWE4bSGhaPlZxYkyHMeBdapopOptALxBzHcnrhQLvPaEve0zuYu28NTWRM9Owosa+oOUvd49K9g/DSPhzFHcvsPGngKFpEYJmZ4cKOXqYO6nLsFQyDN9Zq20/r2AE6m3j4WLGRitJDKH/xExigylaC6doBfjF4bRP33qU1uoVL8BN/q4kanPywfC89OwDh5xsr7HRhyFw8fh6F54/jnBgH9PzGXFR5KTO2cg3dvnaFfDz/Zst2lqZkhU3e6tKXjWND1eapBPERVVSGThsMbPbWIijmarqpykHjtDHDiD2XTM=
+before_script:
+- |
+  pip install 'cargo<0.2' --user &&
+  export PATH=$HOME/.local/bin:$PATH
+script:
+- |
+  cargo build &&
+  cargo test &&
+  cargo bench
+
