@@ -39,12 +39,12 @@ pub mod trie {
                     });
                 }
             }
-
+            let word_tail: String = word.chars().skip(1).collect();
             self.children
                 .iter_mut()
                 .find(|x| x.value == first_char)
                 .unwrap()
-                .add_word_mut(&word[1..]);
+                .add_word_mut(&word_tail);
         }
 
         /**
@@ -56,8 +56,9 @@ pub mod trie {
                 return true;
             }
             let first_char = query.chars().collect::<Vec<char>>()[0];
+            let query_tail: String = query.chars().skip(1).collect();
             match self.children.iter().find(|x| x.value == first_char) {
-                Some(node) => node.search(&query[1..]),
+                Some(node) => node.search(&query_tail),
                 None => {
                     return false;
                 }
@@ -86,11 +87,11 @@ pub mod trie {
         }
 
         fn get_subtree(&self, query: &str) -> &Trie {
-            let mut owned_query = query;
+            let mut owned_query = String::from(query);
             let mut rover = self;
             while owned_query.len() > 0 {
                 let first_char = owned_query.chars().collect::<Vec<char>>()[0];
-                owned_query = &owned_query[1..];
+                owned_query = owned_query.chars().skip(1).collect();
                 match rover.children.iter().find(|x| x.value == first_char) {
                     Some(node) => rover = node,
                     None => (),
