@@ -1,27 +1,6 @@
+#![feature(test)]
 #[cfg(test)]
-mod tests {
-    use super::trie_node::TrieNode;
-    #[test]
-    fn insert_and_search() {
-        let mut trie = TrieNode::new();
-        trie.add_word_mut("test");
-        trie.add_word_mut("alex");
-        trie.add_word_mut("mary");
-        assert!(trie.search("test"));
-        assert!(trie.search("alex"));
-        assert!(trie.search("mary"));
-    }
-    #[test]
-    fn insert_and_predict() {
-        let mut trie = TrieNode::new();
-        trie.add_word_mut("test");
-        trie.add_word_mut("alex");
-        trie.add_word_mut("testosterone");
-        trie.add_word_mut("alexander");
-        assert!(trie.predict("alex").contains(&String::from("alexander")));
-        assert!(trie.predict("test").contains(&String::from("testosterone")));
-    }
-}
+mod tests;
 /**
  * A minimal Trie that only works for str's intended for use as autocomplete for a dictionary website.
  */
@@ -43,7 +22,6 @@ pub mod trie {
         // Mutates the TrieNode to add a word to it.
         pub fn add_word_mut(&mut self, word: &str) {
             if word.len() == 0 {
-                println!("added word");
                 self.is_end_of_word = true;
                 return;
             }
