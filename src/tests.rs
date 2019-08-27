@@ -1,12 +1,11 @@
-
 extern crate rand;
 extern crate test;
-use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
 use rand::seq::SliceRandom;
+use rand::{thread_rng, Rng};
 use test::Bencher;
 
-use super::trie::Trie;
+use super::Trie;
 
 #[test]
 fn insert_and_search() {
@@ -34,45 +33,35 @@ fn insert_and_predict() {
 fn insert_a_lot(b: &mut Bencher) {
     let mut trie = Trie::new();
     b.iter(|| {
-        let rand_string: String = thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(30)
-        .collect();
+        let rand_string: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
         trie.add_word_mut(&rand_string);
     });
 }
 
 #[bench]
 fn search_a_lot(b: &mut Bencher) {
-    let mut vec_of_strings:Vec<String> = Vec::new();
+    let mut vec_of_strings: Vec<String> = Vec::new();
     let mut trie = Trie::new();
 
     for _ in 0..1000 {
-        let rand_string: String = thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(30)
-        .collect();
-        vec_of_strings.push(rand_string.clone() );
+        let rand_string: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
+        vec_of_strings.push(rand_string.clone());
         trie.add_word_mut(&rand_string)
     }
 
     b.iter(|| {
         trie.search(vec_of_strings.choose(&mut rand::thread_rng()).unwrap());
     })
-
 }
 
 #[bench]
 fn predict_a_lot(b: &mut Bencher) {
-     let mut vec_of_strings:Vec<String> = Vec::new();
+    let mut vec_of_strings: Vec<String> = Vec::new();
     let mut trie = Trie::new();
 
     for _ in 0..1000 {
-        let rand_string: String = thread_rng()
-        .sample_iter(&Alphanumeric)
-        .take(30)
-        .collect();
-        vec_of_strings.push(rand_string.clone() );
+        let rand_string: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
+        vec_of_strings.push(rand_string.clone());
         trie.add_word_mut(&rand_string)
     }
 
