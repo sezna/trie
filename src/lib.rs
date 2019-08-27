@@ -99,7 +99,7 @@ impl Trie {
 
 /// In the implementation of this trie, I have to drop the first character of the query
 /// in multiple places. The index must be calculated manually since the string is
-/// unicode and the characters will have variable length in bytes. This is the
+/// UTF-8 and the characters will have variable length in bytes. This is the
 /// most optimal way of performing this operation that I have found so far.
 fn get_tail(query: &str) -> &str {
     let option = query.char_indices().nth(1);
