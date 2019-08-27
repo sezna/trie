@@ -62,12 +62,21 @@ impl Trie {
         }
     }
 
+    /// This function allows you to specify what comparison to perform when searching the
+    /// tree for your query. The use case that inspired this was case insensitivity. If you
+    ///
+    pub fn predict_by_key<F: Fn(char, char) -> bool>(&self, query: &str, key: F) -> Vec<String> {
+        match self.get_subtree_by_key(query, key) {
+            Some(result) => result.predict_helper(query),
+            None => Vec::new(),
+        }
+    }
+
     /** Takes a query and returns all strings contained in the Trie which
      *  start with that query
      */
     pub fn predict(&self, query: &str) -> Vec<String> {
-        let starting_point = self.get_subtree(query);
-        starting_point.predict_helper(query)
+        self.predict_by_key(query, |a, b| a == b)
     }
 
     fn predict_helper(&self, string_so_far: &str) -> Vec<String> {
@@ -82,18 +91,22 @@ impl Trie {
         }
         return to_return;
     }
-    fn get_subtree(&self, query: &str) -> &Trie {
+
+    // To find something in lower case:
+    // key = |a, b| a.to_lowercase() == b.to_lowercase()
+    fn get_subtree_by_key<F: Fn(char, char) -> bool>(&self, query: &str, key: F) -> Option<&Trie> {
+        println!("getting subtree for {}", query);
         let mut owned_query = query;
         let mut rover = self;
         while owned_query.len() > 0 {
-            let first_char = owned_query.chars().collect::<Vec<char>>()[0];
+            let first_char = owned_query.chars().next().unwrap();
             owned_query = get_tail(owned_query);
-            match rover.children.iter().find(|x| x.value == first_char) {
+            match rover.children.iter().find(|x| key(first_char, x.value)) {
                 Some(node) => rover = node,
-                None => (),
+                None => return None,
             }
         }
-        return rover;
+        return Some(rover);
     }
 }
 
