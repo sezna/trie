@@ -24,7 +24,7 @@ impl Trie {
             self.is_end_of_word = true;
             return;
         }
-        let first_char = word.chars().collect::<Vec<char>>()[0];
+        let first_char = word.chars().next().unwrap();
         // See if we already have this at the current node level
         match self.children.iter().find(|x| x.value == first_char) {
             // Yes, this letter exists in this node...
@@ -53,7 +53,7 @@ impl Trie {
         if query.len() == 0 && self.is_end_of_word {
             return true;
         }
-        let first_char = query.chars().collect::<Vec<char>>()[0];
+        let first_char = query.chars().next().unwrap();
         match self.children.iter().find(|x| x.value == first_char) {
             Some(node) => node.search(get_tail(query)),
             None => {
@@ -86,7 +86,7 @@ impl Trie {
         let mut owned_query = query;
         let mut rover = self;
         while owned_query.len() > 0 {
-            let first_char = owned_query.chars().collect::<Vec<char>>()[0];
+            let first_char = owned_query.chars().next().unwrap();
             owned_query = get_tail(owned_query);
             match rover.children.iter().find(|x| x.value == first_char) {
                 Some(node) => rover = node,
