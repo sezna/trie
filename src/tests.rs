@@ -29,6 +29,17 @@ fn insert_and_predict() {
     assert!(trie.predict("test").contains(&String::from("testosterone")));
 }
 
+#[test]
+fn doesnt_match_nonexistent() {
+    let mut trie = Trie::new();
+    trie.add_word_mut("test");
+    trie.add_word_mut("alex");
+    trie.add_word_mut("testosterone");
+    trie.add_word_mut("alexander");
+    assert_eq!(trie.predict("not_in_the_tree").len(), 0);
+    assert_eq!(trie.predict("alexx").len(), 0);
+}
+
 #[bench]
 fn insert_a_lot(b: &mut Bencher) {
     let mut trie = Trie::new();

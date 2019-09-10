@@ -66,8 +66,12 @@ impl Trie {
      *  start with that query
      */
     pub fn predict(&self, query: &str) -> Vec<String> {
-        let starting_point = self.get_subtree(query);
-        starting_point.predict_helper(query)
+        if let Some(tree) = self.get_subtree(query) {
+            tree.predict_helper(query)
+        }
+        else {
+            Vec::new()
+        }
     }
 
     fn predict_helper(&self, string_so_far: &str) -> Vec<String> {
@@ -82,7 +86,7 @@ impl Trie {
         }
         return to_return;
     }
-    fn get_subtree(&self, query: &str) -> &Trie {
+    fn get_subtree(&self, query: &str) -> Option<&Trie> {
         let mut owned_query = query;
         let mut rover = self;
         while owned_query.len() > 0 {
@@ -90,10 +94,10 @@ impl Trie {
             owned_query = get_tail(owned_query);
             match rover.children.iter().find(|x| x.value == first_char) {
                 Some(node) => rover = node,
-                None => (),
+                None => return None,
             }
         }
-        return rover;
+        return Some(rover);
     }
 }
 
